@@ -7,12 +7,14 @@
   <title>Viewer</title>
   <style>
     .loader {
-      border: 16px solid #f3f3f3; /* Light grey */
-      border-top: 16px solid #3498db; /* Blue */
+      border: 16px solid #f3f3f3;
+      /* Light grey */
+      border-top: 16px solid #3498db;
+      /* Blue */
       border-radius: 50%;
       width: 120px;
       height: 120px;
-      animation: spin 2s linear infinite;      
+      animation: spin 2s linear infinite;
       position: absolute;
       left: 47%;
       top: 30%;
@@ -82,8 +84,13 @@
     }
 
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
     .column {
@@ -126,7 +133,7 @@
 
   </script>
 
-  <div id="loader" ></div>
+  <div id="loader"></div>
   <button
     onclick="alert('Chopper model by : https://sketchfab.com/ArtyomOganesyan \n Motorcycle model by : https://sketchfab.com/kreems \n Scooter model by : https://sketchfab.com/fakevalerie');"
     type="button" class="btn btn-dark info"> ! </button>
@@ -137,68 +144,80 @@
       <div class="row">
         <div class="col">
         </div>
-        <div class="col-6 wrapper">         
-          <button onclick="window.viewer3D.start()" type="button" class="btn btn-light" style="font-size: 25px;"> Start/Stop Engine</button>
+        <div class="col-6 wrapper">
+          <button onclick="if(window.viewer3D){ window.viewer3D.start(); } " type="button" class="btn btn-light"
+            style="font-size: 25px;"> Start/Stop Engine</button>
         </div>
-        <div class="col">       
+        <div class="col">
         </div>
       </div>
       <div class="row">
         <div class="col">
-       
         </div>
         <div class="col-xs-12 col-md-8 col-sm-10">
           <div class="container">
             <div class="row container-body" style="border-radius: 5px 5px 0px 0px;">
               <div class="col">
                 <div class="title"> Chopper </div>
-                <img src="./Catlog/chopper.png" class="thumbnail"
-                  onclick="document.getElementById('loader').className = 'loader';
-                  window.loadModel(window.viewer3D, 'chopper');">
+                <img src="./Catlog/chopper.png" class="thumbnail" onclick="if(window.loadModel) {document.getElementById('loader').className = 'loader';
+                  window.loadModel(window.viewer3D, 'chopper');}">
               </div>
               <div class="col">
                 <div class="title"> Motorcycle </div>
-                <img src="./Catlog/motorcycle.png" class="thumbnail"
-                  onclick="document.getElementById('loader').className = 'loader';
-                  window.loadModel(window.viewer3D, 'motorcycle');">
+                <img src="./Catlog/motorcycle.png" class="thumbnail" onclick=" if(window.loadModel) {document.getElementById('loader').className = 'loader';
+                 window.loadModel(window.viewer3D, 'motorcycle');}">
               </div>
               <div class="col">
                 <div class="title"> Scooter </div>
-                <img src="./Catlog/scooter.png" class="thumbnail"
-                  onclick="document.getElementById('loader').className = 'loader';
-                  window.loadModel(window.viewer3D, 'scooter');">
+                <img src="./Catlog/scooter.png" class="thumbnail" onclick="if(window.loadModel) {document.getElementById('loader').className = 'loader';
+                  window.loadModel(window.viewer3D, 'scooter');}">
               </div>
             </div>
           </div>
         </div>
         <div class="col">
-        
         </div>
       </div>
       <div class="row">
         <div class="col">
-     
         </div>
-        <div class="col-xs-12 col-md-8 col-sm-10" >
+        <div class="col-xs-12 col-md-8 col-sm-10">
           <div class="container">
-            <div class="row container-body" style="border-radius: 0px 0px 5px 5px;" >
+            <div class="row container-body" style="border-radius: 0px 0px 5px 5px;">
               <div class="col">
-                <div class="color" style=" background: #ff0000;" onclick="window.viewer3D.updateModelColor({r:1, g:0, b:0});">
+                <div class="color" style=" background: #ff0000;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:1, g:0, b:0});}">
                 </div>
               </div>
               <div class="col">
-                <div class="color" style=" background: #0000ff;" onclick="window.viewer3D.updateModelColor({r:0, g:0, b:1});">
+                <div class="color" style=" background: #00ff00;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:0, g:1, b:0});}">
                 </div>
               </div>
               <div class="col">
-                <div class="color" style=" background: #ffff00;" onclick="window.viewer3D.updateModelColor({r:1, g:1, b:0});" >
+                <div class="color" style=" background: #0000ff;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:1, g:0, b:1});}">
+                </div>
+              </div>
+              <div class="col">
+                <div class="color" style=" background: #ffff00;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:1, g:1, b:0});}">
+                </div>
+              </div>
+              <div class="col">
+                <div class="color" style=" background: #ff00ff;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:1, g:0, b:1});}">
+                </div>
+              </div>
+              <div class="col">
+                <div class="color" style=" background: #00ffff;"
+                  onclick="if(window.viewer3D) { window.viewer3D.updateModelColor({r:0, g:1, b:1});}">
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="col">
-      
         </div>
       </div>
     </div>

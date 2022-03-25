@@ -192,22 +192,22 @@ export class Viewer3D {
     this.scrollValue = number;
   }
 
-  start() {
+  async start() {
     if (this.modelName === "") return;
     if (this.isEngineStart) {
       this.stop();
       return;
     }
 
-    this.audio = new Audio("./Catlog/" + this.modelName + ".wav");
+    this.audio = new Audio("./Catlog/" + this.modelName + ".mp3");
     this.audio.loop = true;
-    this.audio.play();
+    await this.audio.play();
 
     this.switchLight(this.scene);
     this.isEngineStart = true;
   }
 
-  stop() {
+  async stop() {
     if (!this.isEngineStart) return;
 
     this.audio.pause();
@@ -282,8 +282,6 @@ export class Viewer3D {
             object3d.material.color.g === currentLampColor.g &&
             object3d.material.color.b === currentLampColor.b
           ) {
-            console.log(object3d.material.color);
-
             var spotLight = new THREE.PointLight(0xffff00, 100);
             spotLight.angle = Math.PI / 3;
             spotLight.penumbra = 0.1;
