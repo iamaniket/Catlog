@@ -12,7 +12,6 @@ export class Viewer3D {
     this.container = document.getElementById(canvasId);
     this.currentColor = { r: 1, g: 0, b: 0 };
     this.lampOffColor = { r: 0.5, g: 0.5, b: 0.5 };
-    this.lampOnColor = { r: 0.99, g: 0.99, b: 0.99 };
     this.isEngineStart = false;
     this.audio = new Audio();
 
@@ -195,14 +194,31 @@ export class Viewer3D {
 
   start() {
     if (this.modelName === "") return;
-    if (this.isEngineStart) return;
+    if (this.isEngineStart) {
+      this.stop();
+      return;
+    }
 
     this.audio = new Audio("./Catlog/" + this.modelName + ".wav");
     this.audio.loop = true;
     this.audio.play();
 
-    this.turnOnLight(this.scene, this.lampOnColor);
+    this.switchLight(this.scene);
     this.isEngineStart = true;
+  }
+
+  stop() {
+    if (!this.isEngineStart) return;
+
+    this.audio.pause();
+    viewer3D.lampOffColor = { r: 0.5, g: 0.5, b: 0.5 };
+    viewer3D.isEngineStart = false;
+
+    viewer3D.scene.children.forEach((child) => {
+      if (child.uuid === "headLamp") {
+        viewer3D.scene.remove(child);
+      }
+    });
   }
 
   /**
@@ -250,19 +266,17 @@ export class Viewer3D {
   }
 
   /* Recursive function to Traverse the Scene-> Find mesh -> get material-> update the material color of lamp to new color white and add point light for better effect */
-  turnOnLight(object3d, color) {
+  switchLight(object3d) {
     if (object3d) {
       let childrenLength = object3d.children.length;
       if (childrenLength > 0) {
         for (let i = 0; i < childrenLength; i++) {
-          this.turnOnLight(object3d.children[i], color);
+          this.switchLight(object3d.children[i]);
         }
         return;
       } else {
         if (object3d.material) {
-          var currentLampColor = this.isEngineStart
-            ? this.lampOnColor
-            : this.lampOffColor;
+          var currentLampColor = this.lampOffColor;
           if (
             object3d.material.color.r === currentLampColor.r &&
             object3d.material.color.g === currentLampColor.g &&
@@ -270,11 +284,18 @@ export class Viewer3D {
           ) {
             console.log(object3d.material.color);
 
-            var spotLight = new THREE.SpotLight(0xffffff, 15);
-            spotLight.angle = Math.PI / 2;
+            var spotLight = new THREE.PointLight(0xffff00, 100);
+            spotLight.angle = Math.PI / 3;
             spotLight.penumbra = 0.1;
-            spotLight.decay = 2;
-            spotLight.distance = 200;
+            spotLight.decay = 3;
+            // chopper is marge in size so lamp should be large
+            spotLight.distance =
+              this.modelName === "chopper"
+                ? 500
+                : this.modelName === "motorcycle"
+                ? 1
+                : 1;
+
             spotLight.uuid = "headLamp";
             spotLight.castShadow = true;
             spotLight.shadow.mapSize.width = 512;
@@ -288,12 +309,13 @@ export class Viewer3D {
             var box = new THREE.Box3().setFromObject(object3d);
             var center = new THREE.Vector3();
             box.getCenter(center);
-            center.y = box.min.y;
+            center.z = box.min.z - 0.25;
+            // center.y = box.max.y;
             spotLight.position.copy(center);
             this.scene.add(spotLight);
-            object3d.material.color.r = color.r;
-            object3d.material.color.g = color.g;
-            object3d.material.color.b = color.b;
+
+            // const spotLightHelper = new THREE.PointLightHelper(spotLight);
+            // this.scene.add(spotLightHelper);
           }
         }
       }
@@ -392,7 +414,6 @@ export function loadModel(viewer3D, modelName) {
     viewer3D.modelName = modelName;
     viewer3D.currentColor = { r: 1, g: 0, b: 0 };
     viewer3D.lampOffColor = { r: 0.5, g: 0.5, b: 0.5 };
-    viewer3D.lampOnColor = { r: 0.99, g: 0.99, b: 0.99 };
     viewer3D.isEngineStart = false;
 
     viewer3D.scene.children.forEach((child) => {
@@ -400,5 +421,6 @@ export function loadModel(viewer3D, modelName) {
         viewer3D.scene.remove(child);
       }
     });
+    viewer3D.modelLoadCompleteCallback();
   });
 }
